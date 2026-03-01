@@ -15,3 +15,10 @@ func LoadConfig() *Config {
 	}
 
 }
+
+func ValidatePassword(receivedPassword string, cfg *Config) bool {
+	if receivedPassword == cfg.Password {
+		return true
+	}
+	return false
+}
