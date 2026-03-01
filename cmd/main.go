@@ -9,6 +9,10 @@ import (
 
 func main() {
 
+	userPassword := os.Getenv("USER_PASSWORD")
+
+	fmt.Println(userPassword)
+
 	http.HandleFunc("/", handler.LandingHandler)
 	http.HandleFunc("/form", handler.FormHandler)
 
