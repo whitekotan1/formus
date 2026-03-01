@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FormFlow — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #1e1e1e;
+      --border-focus: #333;
+      --accent: #e8ff47;
+      --text: #f0f0f0;
+      --muted: #555;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 380px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4rem;
+    }
+
+    .sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    label {
+      display: block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="password"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 1.2rem;
+    }
+
+    input[type="password"]:focus {
+      border-color: var(--border-focus);
+    }
+
+    button {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.8rem;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .error {
+      display: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: #ff5f5f;
+      margin-bottom: 1rem;
+    }
+
+    .error.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">FORMFLOW</div>
+    <h1>Welcome back.</h1>
+    <p class="sub">Enter your password to continue</p>
+    <form action="/login" method="POST">
+      <label>PASSWORD</label>
+      <div class="error" id="err">Wrong password. Try again.</div>
+      <input type="password" name="password" placeholder="••••••••" autofocus/>
+      <button type="submit">Enter →</button>
+    </form>
+  </div>
+  <script>
+    if (new URLSearchParams(location.search).get('error')) {
+      document.getElementById('err').classList.add('show')
+    }
+  </script>
+</body>
+</html>
