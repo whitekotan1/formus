@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"formus/config"
 	"formus/handler"
 	"net/http"
 	"os"
@@ -9,12 +10,14 @@ import (
 
 func main() {
 
-	userPassword := os.Getenv("USER_PASSWORD")
+	cfg := config.LoadConfig()
 
-	fmt.Println(userPassword)
-
+	passwordHnldr := &handler.PasswordHandler{
+		Password: cfg.Password,
+	}
 	http.HandleFunc("/", handler.LandingHandler)
 	http.HandleFunc("/form", handler.FormHandler)
+	http.HandleFunc("/login", passwordHnldr.LoginHandler)
 
 	err := http.ListenAndServe(":5000", nil)
 
