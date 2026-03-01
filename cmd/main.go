@@ -9,6 +9,7 @@ import (
 
 func main() {
 
+	http.HandleFunc("/", handler.LandingHandler)
 	http.HandleFunc("/form", handler.FormHandler)
 
 	err := http.ListenAndServe(":5000", nil)
