@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
+	"formus/handler"
 	"net/http"
 	"os"
 )
 
 func main() {
+
+	http.HandleFunc("/form", handler.FormHandler)
 
 	err := http.ListenAndServe(":5000", nil)
 
