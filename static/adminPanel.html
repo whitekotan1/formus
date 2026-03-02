@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formus — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface2: #161616;
+      --border: #1e1e1e;
+      --accent: #e8ff47;
+      --text: #f0f0f0;
+      --muted: #555;
+      --muted2: #333;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 220px;
+      height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+
+    .logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 2.5rem;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex: 1;
+    }
+
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.6rem 0.8rem;
+      border-radius: 4px;
+      transition: background 0.15s, color 0.15s;
+      letter-spacing: 0.05em;
+    }
+
+    .nav a:hover, .nav a.active {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .nav a.active {
+      color: var(--accent);
+    }
+
+    .sidebar-footer {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted2);
+    }
+
+    /* MAIN */
+    .main {
+      margin-left: 220px;
+      padding: 2rem 2.5rem;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .topbar h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .btn:hover { opacity: 0.85; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: var(--muted2);
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.2rem 1.5rem;
+    }
+
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-value span {
+      color: var(--accent);
+    }
+
+    /* FORMS LIST */
+    .section-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      margin-bottom: 0.8rem;
+    }
+
+    .forms-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.15s;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .form-item:hover {
+      border-color: var(--muted2);
+    }
+
+    .form-item-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .form-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .form-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .form-endpoint {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .form-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    /* TABLE */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-align: left;
+      padding: 0.7rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+
+    tbody td {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text);
+      padding: 0.8rem 1.2rem;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--muted);
+      padding: 0.2rem 0.5rem;
+    }
+
+    /* MODAL */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-bg.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+      animation: fadeUp 0.2s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal h2 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 0.3rem;
+    }
+
+    .modal p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .field label {
+      display: block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.4rem;
+    }
+
+    .field input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      padding: 0.65rem 0.9rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .field input:focus { border-color: var(--muted2); }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">FORMUS</div>
+    <nav class="nav">
+      <a href="/dashboard" class="active">⬡ &nbsp;Forms</a>
+      <a href="/dashboard/submissions">≡ &nbsp;Submissions</a>
+      <a href="/dashboard/settings">⚙ &nbsp;Settings</a>
+    </nav>
+    <div class="sidebar-footer">v0.1.0 · self-hosted</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <h1>Your Forms</h1>
+      <button class="btn" onclick="openModal()">+ New Form</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">TOTAL FORMS</div>
+        <div class="stat-value"><span>3</span></div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">TOTAL SUBMISSIONS</div>
+        <div class="stat-value"><span>142</span></div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">THIS WEEK</div>
+        <div class="stat-value"><span>24</span></div>
+      </div>
+    </div>
+
+    <!-- FORMS LIST -->
+    <div class="section-title">FORMS</div>
+    <div class="forms-list">
+      <a href="/dashboard/abc123" class="form-item">
+        <div class="form-item-left">
+          <div class="form-dot"></div>
+          <div>
+            <div class="form-name">Contact Form</div>
+            <div class="form-endpoint">POST /f/abc123</div>
+          </div>
+        </div>
+        <div class="form-count">87 submissions →</div>
+      </a>
+      <a href="/dashboard/def456" class="form-item">
+        <div class="form-item-left">
+          <div class="form-dot"></div>
+          <div>
+            <div class="form-name">Newsletter Signup</div>
+            <div class="form-endpoint">POST /f/def456</div>
+          </div>
+        </div>
+        <div class="form-count">41 submissions →</div>
+      </a>
+      <a href="/dashboard/ghi789" class="form-item">
+        <div class="form-item-left">
+          <div class="form-dot"></div>
+          <div>
+            <div class="form-name">Feedback</div>
+            <div class="form-endpoint">POST /f/ghi789</div>
+          </div>
+        </div>
+        <div class="form-count">14 submissions →</div>
+      </a>
+    </div>
+
+    <!-- RECENT SUBMISSIONS -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-title">Recent Submissions</div>
+        <button class="btn btn-ghost">Export CSV</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>FORM</th>
+            <th>DATA</th>
+            <th>DATE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag">Contact Form</span></td>
+            <td>email: john@example.com, name: John</td>
+            <td>2026-03-01 14:32</td>
+          </tr>
+          <tr>
+            <td><span class="tag">Newsletter</span></td>
+            <td>email: anna@gmail.com</td>
+            <td>2026-03-01 13:11</td>
+          </tr>
+          <tr>
+            <td><span class="tag">Feedback</span></td>
+            <td>message: Great product!, rating: 5</td>
+            <td>2026-03-01 11:48</td>
+          </tr>
+          <tr>
+            <td><span class="tag">Contact Form</span></td>
+            <td>email: mike@company.com, name: Mike</td>
+            <td>2026-02-28 22:05</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <h2>New Form</h2>
+      <p>Give your form a name to get an endpoint</p>
+      <form action="/forms/create" method="POST">
+        <div class="field">
+          <label>FORM NAME</label>
+          <input type="text" name="name" placeholder="e.g. Contact Form" autofocus/>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn">Create →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openModal() { document.getElementById('modal').classList.add('open') }
+    function closeModal() { document.getElementById('modal').classList.remove('open') }
+    document.getElementById('modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal()
+    })
+  </script>
+</body>
+</html>

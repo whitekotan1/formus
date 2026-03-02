@@ -40,7 +40,7 @@ func (h *PasswordHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		http.SetCookie(w, cookie)
-		http.Redirect(w, r, "/adminPanel", http.StatusFound)
+		http.Redirect(w, r, "/admin", http.StatusFound)
 
 	default:
 		http.Error(w, "method not aloowed", http.StatusMethodNotAllowed)
