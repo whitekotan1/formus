@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"formus/config"
+	"formus/database"
 	"formus/handler"
 	"formus/middleware"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+	database.InitDB()
 
 	cfg := config.LoadConfig()
 
