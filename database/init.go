@@ -31,7 +31,7 @@ func InitDB() {
 	CREATE TABLE IF NOT EXISTS requests (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     form_id INTEGER NOT NULL,
-    data STRING NOT NULL,
+    data TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (form_id) REFERENCES forms(id)
 
