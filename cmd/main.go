@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"formus/config"
 	"formus/handler"
+	"formus/middleware"
 	"net/http"
 	"os"
 )
@@ -18,7 +19,7 @@ func main() {
 	http.HandleFunc("/", handler.LandingHandler)
 	http.HandleFunc("/form", handler.FormHandler)
 	http.HandleFunc("/login", passwordHnldr.LoginHandler)
-	http.HandleFunc("/admin", handler.AdminPanelHandler)
+	http.HandleFunc("/admin", middleware.Auth(handler.AdminPanelHandler))
 
 	err := http.ListenAndServe(":5000", nil)
 
