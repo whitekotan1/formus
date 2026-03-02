@@ -32,7 +32,7 @@ func (h *PasswordHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		cookie := &http.Cookie{
 			Name:     "formus_auth",
 			Value:    "authorized_true",
-			Path:     "/form",
+			Path:     "/",
 			MaxAge:   3600 * 200,
 			HttpOnly: true,
 			Secure:   false,
