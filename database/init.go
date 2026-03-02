@@ -43,6 +43,8 @@ func InitDB() {
 		log.Fatal("can't create tables", err)
 	}
 
+	DB.Exec(`INSERT OR IGNORE INTO forms (id, name) VALUES (1, 'Test Landing Form');`)
+
 	log.Println("succesfully initialize db")
 
 }
