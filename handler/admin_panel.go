@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"formus/database"
+	"html/template"
+	"log"
 	"net/http"
 )
 
@@ -10,5 +13,21 @@ func AdminPanelHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "only get method allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	http.ServeFile(w, r, "static/adminPanel.html")
+
+	forms := database.GetForms()
+
+	template, err := template.ParseFiles("static/adminPanel.html")
+
+	if err != nil {
+		log.Println("error parsing template", err)
+		http.Error(w, "server error", http.StatusInternalServerError)
+		return
+	}
+
+	err = template.Execute(w, forms)
+
+	if err != nil {
+		log.Println("rendering error", err)
+		http.Error(w, "server error", http.StatusInternalServerError)
+	}
 }
