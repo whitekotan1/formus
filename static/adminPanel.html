@@ -93,7 +93,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
     }
 
     .topbar h1 {
@@ -132,39 +132,6 @@
     .btn-ghost:hover {
       color: var(--text);
       border-color: var(--muted2);
-    }
-
-    /* STATS */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .stat {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.2rem 1.5rem;
-    }
-
-    .stat-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-
-    .stat-value span {
-      color: var(--accent);
     }
 
     /* FORMS LIST */
@@ -231,67 +198,15 @@
       font-size: 0.7rem;
       color: var(--muted);
     }
-
-    /* TABLE */
-    .table-wrap {
-      background: var(--surface);
-      border: 1px solid var(--border);
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      border: 1px dashed var(--border);
       border-radius: 6px;
-      overflow: hidden;
-    }
-
-    .table-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.2rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .table-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead th {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.62rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-align: left;
-      padding: 0.7rem 1.2rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.1s;
-    }
-
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--surface2); }
-
-    tbody td {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--text);
-      padding: 0.8rem 1.2rem;
-    }
-
-    .tag {
-      display: inline-block;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.6rem;
-      color: var(--muted);
-      padding: 0.2rem 0.5rem;
     }
 
     /* MODAL */
@@ -373,128 +288,56 @@
 </head>
 <body>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">FORMUS</div>
     <nav class="nav">
-      <a href="/dashboard" class="active">⬡ &nbsp;Forms</a>
-      <a href="/dashboard/submissions">≡ &nbsp;Submissions</a>
-      <a href="/dashboard/settings">⚙ &nbsp;Settings</a>
+      <a href="/admin" class="active">⬡ &nbsp;Forms</a>
+      <a href="#">⚙ &nbsp;Settings</a>
     </nav>
     <div class="sidebar-footer">v0.1.0 · self-hosted</div>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
     <div class="topbar">
       <h1>Your Forms</h1>
       <button class="btn" onclick="openModal()">+ New Form</button>
     </div>
 
-    <!-- STATS -->
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-label">TOTAL FORMS</div>
-        <div class="stat-value"><span>3</span></div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">TOTAL SUBMISSIONS</div>
-        <div class="stat-value"><span>142</span></div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">THIS WEEK</div>
-        <div class="stat-value"><span>24</span></div>
-      </div>
-    </div>
-
-    <!-- FORMS LIST -->
-    <div class="section-title">FORMS</div>
+    <div class="section-title">ACTIVE ENDPOINTS</div>
     <div class="forms-list">
-      <a href="/dashboard/abc123" class="form-item">
+      
+      {{range .}}
+      <a href="/admin/submissions?form_id={{.ID}}" class="form-item">
         <div class="form-item-left">
           <div class="form-dot"></div>
           <div>
-            <div class="form-name">Contact Form</div>
-            <div class="form-endpoint">POST /f/abc123</div>
+            <div class="form-name">{{.Name}}</div>
+            <div class="form-endpoint">POST /form?form_id={{.ID}}</div>
           </div>
         </div>
-        <div class="form-count">87 submissions →</div>
+        <div class="form-count">View Submissions &rarr;</div>
       </a>
-      <a href="/dashboard/def456" class="form-item">
-        <div class="form-item-left">
-          <div class="form-dot"></div>
-          <div>
-            <div class="form-name">Newsletter Signup</div>
-            <div class="form-endpoint">POST /f/def456</div>
-          </div>
-        </div>
-        <div class="form-count">41 submissions →</div>
-      </a>
-      <a href="/dashboard/ghi789" class="form-item">
-        <div class="form-item-left">
-          <div class="form-dot"></div>
-          <div>
-            <div class="form-name">Feedback</div>
-            <div class="form-endpoint">POST /f/ghi789</div>
-          </div>
-        </div>
-        <div class="form-count">14 submissions →</div>
-      </a>
-    </div>
-
-    <!-- RECENT SUBMISSIONS -->
-    <div class="table-wrap">
-      <div class="table-header">
-        <div class="table-title">Recent Submissions</div>
-        <button class="btn btn-ghost">Export CSV</button>
+      {{else}}
+      <div class="empty-state">
+        No forms created yet. Click "+ New Form" to get started.
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>FORM</th>
-            <th>DATA</th>
-            <th>DATE</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="tag">Contact Form</span></td>
-            <td>email: john@example.com, name: John</td>
-            <td>2026-03-01 14:32</td>
-          </tr>
-          <tr>
-            <td><span class="tag">Newsletter</span></td>
-            <td>email: anna@gmail.com</td>
-            <td>2026-03-01 13:11</td>
-          </tr>
-          <tr>
-            <td><span class="tag">Feedback</span></td>
-            <td>message: Great product!, rating: 5</td>
-            <td>2026-03-01 11:48</td>
-          </tr>
-          <tr>
-            <td><span class="tag">Contact Form</span></td>
-            <td>email: mike@company.com, name: Mike</td>
-            <td>2026-02-28 22:05</td>
-          </tr>
-        </tbody>
-      </table>
+      {{end}}
+
     </div>
   </main>
 
-  <!-- MODAL -->
   <div class="modal-bg" id="modal">
     <div class="modal">
       <h2>New Form</h2>
-      <p>Give your form a name to get an endpoint</p>
+      <p>Give your form a name to generate an endpoint</p>
       <form action="/forms/create" method="POST">
         <div class="field">
           <label>FORM NAME</label>
-          <input type="text" name="name" placeholder="e.g. Contact Form" autofocus/>
+          <input type="text" name="name" placeholder="e.g. Early Access Waitlist" required autofocus/>
         </div>
         <div class="modal-actions">
           <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn">Create →</button>
+          <button type="submit" class="btn">Create &rarr;</button>
         </div>
       </form>
     </div>
