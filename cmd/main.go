@@ -22,6 +22,7 @@ func main() {
 	http.HandleFunc("/form", handler.FormHandler)
 	http.HandleFunc("/login", passwordHnldr.LoginHandler)
 	http.HandleFunc("/admin", middleware.Auth(handler.AdminPanelHandler))
+	http.HandleFunc("/form/create", handler.CreateFormHandler)
 
 	err := http.ListenAndServe(":5000", nil)
 
