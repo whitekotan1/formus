@@ -4,160 +4,261 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Formus — Inbox</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    a { text-decoration: none; color: inherit; }
 
     :root {
-      --bg: #0a0a0a;
-      --surface: #111111;
-      --surface2: #161616;
-      --border: #2a2a2a;
-      --accent: #e8ff47;
-      --text: #ffffff;
-      --muted: #9ca3af;
-      --muted2: #4b5563;
+      --font:  'Outfit', sans-serif;
+      --mono:  'JetBrains Mono', monospace;
+      --ease:  cubic-bezier(0.23, 1, 0.32, 1);
+      --text-1: #fdf0f5;
+      --text-2: rgba(253,230,240,0.55);
+      --text-3: rgba(253,230,240,0.30);
+      --rose:   #e91e63;
+      --blush:  #f48fb1;
+      --gold:   #ffb74d;
+      --glass:      rgba(40,8,32,0.68);
+      --glass-h:    rgba(60,14,48,0.80);
+      --border:     rgba(233,30,99,0.20);
+      --border-h:   rgba(244,143,177,0.40);
+      --border-dim: rgba(233,30,99,0.10);
     }
 
-    html { font-size: 16px; }
+    html, body {
+      min-height: 100%;
+      font-family: var(--font);
+      color: var(--text-1);
+      -webkit-font-smoothing: antialiased;
+    }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Syne', sans-serif;
+      background:
+        radial-gradient(ellipse 90% 55% at 12% 0%,   rgba(180,20,75,0.52)  0%, transparent 55%),
+        radial-gradient(ellipse 55% 45% at 88% 10%,  rgba(255,130,40,0.28) 0%, transparent 50%),
+        radial-gradient(ellipse 70% 60% at 50% 110%, rgba(70,5,55,0.85)    0%, transparent 60%),
+        linear-gradient(170deg, #280d2e 0%, #180820 40%, #0e0515 100%);
       min-height: 100vh;
-      line-height: 1.5;
+    }
+
+    .bloom {
+      position: fixed;
+      width: 700px; height: 380px;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at center, rgba(220,40,100,0.14) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
     }
 
     .container {
-      max-width: 900px;
+      position: relative;
+      max-width: 820px;
       margin: 0 auto;
-      padding: 4rem 2rem;
+      padding: 52px 40px;
+      z-index: 1;
     }
 
+    /* HEADER */
     .header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 3rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border);
+      justify-content: space-between;
+      margin-bottom: 48px;
     }
 
-    .header h1 {
-      font-size: 2rem;
+    .header-left { display: flex; flex-direction: column; gap: 6px; }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    h1 {
+      font-size: 38px;
       font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(130deg, #fdf0f5 20%, #f48fb1 65%, #ffb74d 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .back-btn {
-      color: var(--muted);
-      text-decoration: none;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.9rem;
-      transition: color 0.15s;
-    }
-
-    .back-btn:hover { color: var(--text); }
-
-    .request-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .meta-info {
-      display: flex;
-      justify-content: space-between;
+      display: inline-flex;
       align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-3);
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      transition: all 280ms var(--ease);
+    }
+    .back-btn:hover {
+      color: var(--text-1);
+      border-color: var(--border-h);
+      background: var(--glass-h);
+    }
+    .back-btn svg { width: 14px; height: 14px; }
+
+    /* CARDS */
+    .cards { display: flex; flex-direction: column; gap: 14px; }
+
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid var(--border);
+      box-shadow: inset 0 1px 0 rgba(255,180,160,0.06), 0 8px 32px rgba(0,0,0,0.45);
+      border-radius: 16px;
+      padding: 26px 28px;
+      animation: rise 0.5s var(--ease) both;
+      transition: border-color 350ms var(--ease), background 350ms var(--ease);
+    }
+    .card:nth-child(1){animation-delay:.04s}
+    .card:nth-child(2){animation-delay:.09s}
+    .card:nth-child(3){animation-delay:.14s}
+    .card:nth-child(4){animation-delay:.19s}
+    .card:nth-child(5){animation-delay:.24s}
+    .card:hover {
+      border-color: var(--border-h);
+      background: var(--glass-h);
     }
 
-    .badge {
-      background: var(--accent);
-      color: #000;
-      padding: 0.3rem 0.8rem;
-      border-radius: 4px;
-      font-family: 'DM Mono', monospace;
-      font-weight: 600;
-      font-size: 0.8rem;
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CARD META */
+    .meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .id-badge {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--blush);
+      background: rgba(244,143,177,0.10);
+      border: 1px solid rgba(244,143,177,0.22);
+      border-radius: 8px;
+      padding: 5px 12px;
+      letter-spacing: 0.04em;
     }
 
     .time {
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      font-size: 0.85rem;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-3);
     }
 
-    .fields-grid {
-      display: grid;
-      gap: 1rem;
-    }
+    /* FIELDS */
+    .fields { display: flex; flex-direction: column; gap: 12px; }
 
     .field-row {
       display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 1rem;
+      grid-template-columns: 180px 1fr;
+      gap: 16px;
+      align-items: baseline;
     }
 
     .field-key {
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      font-size: 0.9rem;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      color: var(--text-3);
     }
 
     .field-value {
-      color: var(--text);
-      font-size: 1.05rem;
+      font-size: 16px;
       font-weight: 500;
+      color: var(--text-1);
       word-break: break-word;
+      line-height: 1.5;
     }
 
-    .empty-state {
+    /* EMPTY */
+    .empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 96px 40px;
+      border-radius: 16px;
+      border: 1px dashed rgba(233,30,99,0.16);
       text-align: center;
-      padding: 5rem 0;
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      border: 1px dashed var(--border);
-      border-radius: 8px;
+    }
+    .empty svg {
+      width: 44px; height: 44px;
+      color: rgba(244,143,177,0.22);
+      margin-bottom: 18px;
+    }
+    .empty p {
+      font-family: var(--mono);
+      font-size: 15px;
+      color: var(--text-3);
     }
   </style>
 </head>
 <body>
+  <div class="bloom" aria-hidden="true"></div>
+
   <div class="container">
     <div class="header">
-      <h1>Inbox 📥</h1>
-      <a href="/admin" class="back-btn">&larr; Back to Dashboard</a>
+      <div class="header-left">
+        <span class="eyebrow">Submissions</span>
+        <h1>Inbox</h1>
+      </div>
+      <a href="/admin" class="back-btn">
+        <i data-lucide="arrow-left"></i>
+        Back
+      </a>
     </div>
 
-    {{if .}}
-      {{range .}}
-      <div class="request-card">
-        <div class="meta-info">
-          <span class="badge">ID: #{{.ID}}</span>
-          <span class="time">{{.CreatedTime}}</span>
-        </div>
-        
-        <div class="fields-grid">
-          {{range $key, $value := .Fields}}
-          <div class="field-row">
-            <span class="field-key">{{$key}}</span>
-            <span class="field-value">{{$value}}</span>
+    <div class="cards">
+      {{if .}}
+        {{range .}}
+        <div class="card">
+          <div class="meta">
+            <span class="id-badge">#{{.ID}}</span>
+            <span class="time">{{.CreatedTime}}</span>
           </div>
-          {{end}}
+          <div class="fields">
+            {{range $key, $value := .Fields}}
+            <div class="field-row">
+              <span class="field-key">{{$key}}</span>
+              <span class="field-value">{{$value}}</span>
+            </div>
+            {{end}}
+          </div>
         </div>
+        {{end}}
+      {{else}}
+      <div class="empty">
+        <i data-lucide="inbox"></i>
+        <p>No submissions yet. Waiting for incoming data.</p>
       </div>
       {{end}}
-    {{else}}
-      <div class="empty-state">
-        No submissions found. Waiting for incoming data...
-      </div>
-    {{end}}
+    </div>
   </div>
+
+  <script>lucide.createIcons();</script>
 </body>
 </html>

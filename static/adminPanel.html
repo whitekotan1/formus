@@ -3,368 +3,427 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Formus — Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <title>Formus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
     :root {
-      --bg: #0a0a0a;
-      --surface: #111111;
-      --surface2: #161616;
-      --border: #2a2a2a;
-      --accent: #e8ff47;
-      --text: #ffffff;
-      --muted: #9ca3af;
-      --muted2: #4b5563;
+      --font:  'Outfit', sans-serif;
+      --mono:  'JetBrains Mono', monospace;
+      --ease:  cubic-bezier(0.23, 1, 0.32, 1);
+
+      --text-1: #fdf0f5;
+      --text-2: rgba(253,230,240,0.60);
+      --text-3: rgba(253,230,240,0.32);
+
+      --rose:   #e91e63;
+      --blush:  #f48fb1;
+      --gold:   #ffb74d;
+
+      --glass:    rgba(40, 8, 32, 0.68);
+      --glass-h:  rgba(60, 14, 48, 0.80);
+      --border:   rgba(233,30,99,0.20);
+      --border-h: rgba(244,143,177,0.45);
+
+      --sidebar-w: 220px;
     }
 
-    html {
-      font-size: 16px; 
+    html, body {
+      min-height: 100%;
+      font-family: var(--font);
+      color: var(--text-1);
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Syne', sans-serif;
+      background:
+        radial-gradient(ellipse 90% 55% at 10% 0%,   rgba(180,20,75,0.50)  0%, transparent 55%),
+        radial-gradient(ellipse 55% 45% at 88% 12%,  rgba(255,130,40,0.28) 0%, transparent 50%),
+        radial-gradient(ellipse 70% 60% at 50% 105%, rgba(70,5,55,0.85)    0%, transparent 60%),
+        linear-gradient(170deg, #280d2e 0%, #180820 40%, #0e0515 100%);
       min-height: 100vh;
-      line-height: 1.5;
     }
 
-    /* SIDEBAR */
+    /* glass */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid var(--border);
+      box-shadow: inset 0 1px 0 rgba(255,180,160,0.07), 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    /* layout */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* sidebar */
     .sidebar {
-      position: fixed;
-      top: 0; left: 0;
-      width: 250px;
+      position: fixed; top: 0; left: 0;
+      width: var(--sidebar-w);
       height: 100vh;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      padding: 2rem;
+      padding: 36px 24px;
+      z-index: 20;
     }
 
     .logo {
-      font-family: 'DM Mono', monospace;
-      font-size: 1.1rem;
+      font-family: var(--mono);
+      font-size: 14px;
       font-weight: 500;
-      color: var(--accent);
-      letter-spacing: 0.15em;
-      margin-bottom: 3rem;
+      letter-spacing: 0.28em;
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(255,183,77,0.5);
+      margin-bottom: 44px;
+      user-select: none;
     }
 
-    .nav {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      flex: 1;
-    }
+    nav { display: flex; flex-direction: column; gap: 4px; }
 
-    .nav a {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.95rem;
-      color: var(--muted);
-      text-decoration: none;
-      padding: 0.8rem 1rem;
-      border-radius: 6px;
-      transition: background 0.15s, color 0.15s;
-      letter-spacing: 0.05em;
+    nav a {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-2);
+      border: 1px solid transparent;
+      transition: all 300ms var(--ease);
     }
-
-    .nav a:hover, .nav a.active {
-      background: var(--surface2);
-      color: var(--text);
+    nav a:hover { background: rgba(233,30,99,0.10); color: var(--text-1); }
+    nav a.active {
+      background: rgba(233,30,99,0.16);
+      border-color: rgba(244,143,177,0.28);
+      color: var(--text-1);
     }
+    nav a.active svg { color: var(--blush); }
+    nav a svg { width: 17px; height: 17px; flex-shrink: 0; }
 
-    .nav a.active {
-      color: var(--accent);
-    }
-
-    .sidebar-footer {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--muted2);
-    }
-
-    /* MAIN */
+    /* main */
     .main {
-      margin-left: 250px;
-      padding: 3rem 4rem;
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 52px 60px;
+      max-width: 880px;
     }
 
+    /* topbar */
     .topbar {
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
       justify-content: space-between;
-      margin-bottom: 4rem;
+      margin-bottom: 52px;
     }
 
-    .topbar h1 {
-      font-size: 2rem;
+    h1 {
+      font-size: 42px;
       font-weight: 800;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.04em;
+      background: linear-gradient(120deg, #fdf0f5 20%, #ffb74d 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--accent);
-      color: #000;
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1rem;
-      padding: 0.8rem 1.5rem;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      transition: opacity 0.15s;
+    /* buttons */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 14px 26px;
+      border-radius: 14px;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, #c2185b 0%, #e91e63 50%, #f06292 100%);
+      box-shadow: 0 0 26px rgba(194,24,91,0.45), inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: all 300ms var(--ease);
     }
-
-    .btn:hover { opacity: 0.85; }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 38px rgba(240,98,146,0.55), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+    .btn-primary svg { width: 16px; height: 16px; }
 
     .btn-ghost {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-      font-family: 'DM Mono', monospace;
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-
-    .btn-ghost:hover {
-      background: var(--surface2);
-      border-color: var(--muted);
-    }
-
-    /* FORMS LIST */
-    .section-title {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--muted);
-      letter-spacing: 0.15em;
-      margin-bottom: 1.2rem;
-    }
-
-    .forms-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      margin-bottom: 2rem;
-    }
-
-    .form-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: border-color 0.15s, transform 0.15s;
-      cursor: pointer;
-      text-decoration: none;
-      color: var(--text);
-    }
-
-    .form-item:hover {
-      border-color: var(--muted);
-      transform: translateY(-1px);
-    }
-
-    .form-item-left {
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-    }
-
-    .form-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 10px rgba(232, 255, 71, 0.2);
-    }
-
-    .form-name {
-      font-weight: 800;
-      font-size: 1.2rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .form-endpoint {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--accent);
-      opacity: 0.8;
-    }
-
-    .form-count {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.95rem;
-      color: var(--muted);
-      font-weight: 500;
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 4rem;
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      font-size: 1rem;
-      border: 1px dashed var(--border);
-      border-radius: 8px;
-    }
-
-    /* MODAL */
-    .modal-bg {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
-
-    .modal-bg.open { display: flex; }
-
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 22px;
       border-radius: 12px;
-      padding: 2.5rem;
-      width: 100%;
-      max-width: 480px;
-      animation: fadeUp 0.2s ease both;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-2);
+      border: 1px solid var(--border);
+      transition: all 250ms var(--ease);
+    }
+    .btn-ghost:hover {
+      background: rgba(233,30,99,0.10);
+      border-color: var(--border-h);
+      color: var(--text-1);
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* section label */
+    .label {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 16px;
     }
 
-    .modal h2 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
+    /* cards */
+    .forms-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .form-card {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 24px 28px;
+      border-radius: 16px;
+      cursor: pointer;
+      animation: rise 0.5s var(--ease) both;
+      transition: transform 400ms var(--ease), background 400ms var(--ease), border-color 400ms var(--ease), box-shadow 400ms var(--ease);
+    }
+    .form-card:nth-child(1){animation-delay:.04s}
+    .form-card:nth-child(2){animation-delay:.09s}
+    .form-card:nth-child(3){animation-delay:.14s}
+    .form-card:nth-child(4){animation-delay:.19s}
+    .form-card:nth-child(5){animation-delay:.24s}
+
+    @keyframes rise {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:translateY(0); }
     }
 
-    .modal p {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 2rem;
+    .form-card:hover {
+      transform: translateY(-3px);
+      background: var(--glass-h);
+      border-color: var(--border-h);
+      box-shadow: inset 0 1px 0 rgba(255,160,120,0.09), 0 14px 44px rgba(0,0,0,0.55);
     }
 
-    .field {
-      margin-bottom: 1.5rem;
+    .card-left { display: flex; align-items: center; gap: 20px; }
+
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--blush);
+      box-shadow: 0 0 10px rgba(244,143,177,0.7);
+      flex-shrink: 0;
+      animation: glow 2.5s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%,100%{box-shadow:0 0 7px rgba(244,143,177,0.5)}
+      50%{box-shadow:0 0 18px rgba(255,138,101,0.9)}
     }
 
+    .card-name {
+      font-size: 19px;
+      font-weight: 650;
+      color: var(--text-1);
+      margin-bottom: 5px;
+      letter-spacing: -0.01em;
+    }
+
+    .card-endpoint {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--blush);
+      opacity: 0.70;
+    }
+
+    .card-cta {
+      display: flex; align-items: center; gap: 7px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-3);
+      white-space: nowrap;
+      transition: color 300ms var(--ease), gap 300ms var(--ease);
+    }
+    .form-card:hover .card-cta { color: var(--blush); gap: 10px; }
+    .card-cta svg { width: 14px; height: 14px; }
+
+    /* empty */
+    .empty {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 90px 40px;
+      border-radius: 16px;
+      border: 1px dashed rgba(233,30,99,0.18);
+      text-align: center;
+    }
+    .empty svg { width: 42px; height: 42px; color: rgba(244,143,177,0.22); margin-bottom: 18px; }
+    .empty p { font-size: 17px; color: var(--text-3); }
+
+    /* dialog */
+    dialog {
+      border: none; background: transparent;
+      padding: 0; width: 100%; max-width: 460px; border-radius: 20px;
+    }
+    dialog::backdrop {
+      background: rgba(12,2,18,0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    dialog[open] .modal-panel { animation: modalIn 0.35s var(--ease) both; }
+    @keyframes modalIn {
+      from { opacity:0; transform:scale(0.94) translateY(10px); filter:blur(6px); }
+      to   { opacity:1; transform:scale(1) translateY(0);       filter:blur(0); }
+    }
+
+    .modal-panel { border-radius: 20px; padding: 38px; }
+
+    .modal-head {
+      display: flex; align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .modal-title {
+      font-size: 24px; font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--text-1); margin-bottom: 5px;
+    }
+    .modal-sub { font-family: var(--mono); font-size: 12px; color: var(--text-3); }
+
+    .icon-btn {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      transition: all 250ms var(--ease);
+    }
+    .icon-btn:hover { background: rgba(233,30,99,0.12); border-color: var(--border-h); color: var(--text-1); }
+    .icon-btn svg { width: 15px; height: 15px; }
+
+    .field { margin-bottom: 28px; }
     .field label {
       display: block;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.6rem;
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 10px;
     }
-
     .field input {
       width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text);
-      font-family: 'DM Mono', monospace;
-      font-size: 1.1rem;
-      padding: 0.8rem 1rem;
+      background: rgba(80,8,52,0.38);
+      border: 1px solid rgba(233,30,99,0.22);
+      border-radius: 12px;
+      color: var(--text-1);
+      font-family: var(--font);
+      font-size: 17px;
+      padding: 14px 18px;
       outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition: all 250ms var(--ease);
     }
-
-    .field input:focus { 
-      border-color: var(--accent); 
-      box-shadow: 0 0 0 1px var(--accent);
+    .field input::placeholder { color: rgba(253,230,240,0.20); }
+    .field input:focus {
+      background: rgba(100,12,68,0.48);
+      border-color: rgba(244,143,177,0.5);
+      box-shadow: 0 0 0 3px rgba(244,143,177,0.10);
     }
 
     .modal-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: flex-end;
-      margin-top: 2rem;
+      display: flex; align-items: center;
+      justify-content: flex-end; gap: 10px;
     }
   </style>
 </head>
 <body>
+<div class="layout">
 
-  <aside class="sidebar">
+  <aside class="sidebar glass">
     <div class="logo">FORMUS</div>
-    <nav class="nav">
-      <a href="/admin" class="active">⬡ &nbsp;Forms</a>
-      <a href="#">⚙ &nbsp;Settings</a>
+    <nav>
+      <a href="/admin" class="active" aria-current="page">
+        <i data-lucide="layout-grid"></i> Forms
+      </a>
+      <a href="#">
+        <i data-lucide="settings"></i> Settings
+      </a>
     </nav>
-    <div class="sidebar-footer">v0.1.0 · self-hosted</div>
   </aside>
 
   <main class="main">
     <div class="topbar">
       <h1>Your Forms</h1>
-      <button class="btn" onclick="openModal()">+ New Form</button>
+      <button type="button" id="open-btn" class="btn-primary">
+        <i data-lucide="plus"></i> New Form
+      </button>
     </div>
 
-    <div class="section-title">ACTIVE ENDPOINTS</div>
+    <div class="label">Active Endpoints</div>
+
     <div class="forms-list">
-      
       {{range .}}
-      <a href="/admin/requests?form_id={{.ID}}" class="form-item">
-        <div class="form-item-left">
-          <div class="form-dot"></div>
+      <a href="/admin/requests?form_id={{.ID}}" class="form-card glass">
+        <div class="card-left">
+          <div class="dot"></div>
           <div>
-            <div class="form-name">{{.Name}}</div>
-            <div class="form-endpoint">POST /form?form_id={{.ID}}</div>
+            <div class="card-name">{{.Name}}</div>
+            <div class="card-endpoint">POST /form?form_id={{.ID}}</div>
           </div>
         </div>
-        <div class="form-count">View Submissions &rarr;</div>
+        <div class="card-cta">
+          View Submissions <i data-lucide="arrow-right"></i>
+        </div>
       </a>
       {{else}}
-      <div class="empty-state">
-        No forms created yet. Click "+ New Form" to get started.
+      <div class="empty">
+        <i data-lucide="inbox"></i>
+        <p>No forms yet — click New Form to start</p>
       </div>
       {{end}}
-
     </div>
   </main>
+</div>
 
-  <div class="modal-bg" id="modal">
-    <div class="modal">
-      <h2>New Form</h2>
-      <p>Give your form a name to generate an endpoint</p>
-      
-      <form action="/form/create" method="POST">
-        <div class="field">
-          <label>FORM NAME</label>
-          <input type="text" name="name" placeholder="e.g. Early Access Waitlist" required autofocus/>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn">Create &rarr;</button>
-        </div>
-      </form>
+<dialog id="dialog" aria-labelledby="modal-title">
+  <div class="modal-panel glass">
+    <div class="modal-head">
+      <div>
+        <h2 class="modal-title" id="modal-title">New Form</h2>
+        <p class="modal-sub">Creates a POST endpoint for your form</p>
+      </div>
+      <button type="button" id="close-btn" class="icon-btn" aria-label="Close">
+        <i data-lucide="x"></i>
+      </button>
     </div>
+    <form action="/form/create" method="POST">
+      <div class="field">
+        <label for="fname">Form Name</label>
+        <input id="fname" type="text" name="name" placeholder="e.g. Early Access Waitlist" autocomplete="off" required/>
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="cancel-btn" class="btn-ghost">Cancel</button>
+        <button type="submit" class="btn-primary">
+          Create <i data-lucide="arrow-right"></i>
+        </button>
+      </div>
+    </form>
   </div>
+</dialog>
 
-  <script>
-    function openModal() { document.getElementById('modal').classList.add('open') }
-    function closeModal() { document.getElementById('modal').classList.remove('open') }
-    document.getElementById('modal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal()
-    })
-  </script>
+<script>
+  lucide.createIcons();
+  (() => {
+    const d = document.getElementById('dialog');
+    const input = document.getElementById('fname');
+    const open = () => { d.showModal(); requestAnimationFrame(() => input.focus()); };
+    const close = () => d.close();
+    document.getElementById('open-btn').addEventListener('click', open);
+    document.getElementById('close-btn').addEventListener('click', close);
+    document.getElementById('cancel-btn').addEventListener('click', close);
+    d.addEventListener('click', e => {
+      const r = d.querySelector('.modal-panel').getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close();
+    });
+    d.addEventListener('cancel', e => { e.preventDefault(); close(); });
+  })();
+</script>
 </body>
 </html>
