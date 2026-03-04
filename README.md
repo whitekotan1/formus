@@ -72,7 +72,7 @@ Once running, Formus exposes:
 Example form:
 
 ```html
-<form action="http://localhost:5000/submit" method="POST">
+<form action="http://localhost:5000/form" method="POST">
   <input type="text" name="email" />
   <textarea name="message"></textarea>
   <button type="submit">Send</button>
