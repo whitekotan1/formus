@@ -1,4 +1,4 @@
-# Formus
+# Formus[BETA]
 
 A high-performance, self-hosted backend service for handling HTML form submissions. Built with Go and SQLite.
 
