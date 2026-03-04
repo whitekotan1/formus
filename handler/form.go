@@ -25,6 +25,7 @@ func FormHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, "can't parse form", http.StatusBadRequest)
+		return
 	}
 	jsonData, err := json.Marshal(r.PostForm)
 
