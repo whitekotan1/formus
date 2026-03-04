@@ -1,0 +1,12 @@
+services:
+  backend:
+    build: .
+    container_name: formus
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./formus-data:/app/data
+
+    env_file:
+      - .env
