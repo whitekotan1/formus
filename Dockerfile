@@ -1,4 +1,4 @@
-FROM golang:1.24 as build_stage
+FROM golang:1.26 as build_stage
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN go mod download
 COPY . .
 
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/formus ./cmd/
+RUN CGO_ENABLED=0 GOOS=linux  go build -o /app/formus ./cmd/
 
 
 FROM alpine:latest
